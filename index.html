@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Siga-me | Competência na Execução Penal</title>
+<title>Competência · Execução Penal | PJe–SEEU</title>
 <style>
 :root{--navy:#12304d;--blue:#2870b3;--blue2:#3f8ac6;--ink:#26384b;--muted:#718197;--line:#dce6ef;--bg:#f3f6fa;--soft:#f7fafc;--green:#257650;--red:#a43a42;--amber:#98640b}
 *{box-sizing:border-box}
@@ -19,12 +19,21 @@ main{max-width:900px;margin:28px auto;padding:0 16px 44px}.panel{background:#fff
 .controls{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:29px;padding-top:19px;border-top:1px solid #edf1f5}.btn{border:0;border-radius:10px;padding:11px 18px;font:600 14px "Segoe UI",Arial,sans-serif;cursor:pointer;transition:.14s}.btn.secondary{background:#edf2f7;color:#38536e}.btn.secondary:hover{background:#e2eaf2}.btn.primary{background:var(--blue);color:#fff;box-shadow:0 4px 11px #2870b326}.btn.primary:hover{background:#1f5d98;transform:translateY(-1px)}.btn:focus-visible,.choice:focus-visible{outline:3px solid #a9cfeb;outline-offset:2px}.btn:disabled{opacity:.38;cursor:not-allowed;transform:none;box-shadow:none}
 .footer{text-align:center;color:#8995a4;font-size:11px;padding-bottom:25px}.pill{display:inline-block;padding:3px 8px;background:#edf5fb;border-radius:20px;color:#2c6492;font-size:11px;font-weight:700;margin-right:5px}
 @media(max-width:620px){header{padding:20px}.panel{border-radius:16px;padding:21px 17px}main{margin:17px auto;padding:0 10px 30px}.track{margin-bottom:26px}.choice{padding:15px 14px}.controls{margin-top:24px}}
+
+.lookup{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;margin-top:8px}
+.lookup input{width:100%;border:1px solid #cfdbe6;border-radius:11px;padding:14px 15px;font:inherit;color:var(--ink);background:#fff}
+.lookup input:focus{outline:3px solid #a9cfeb;outline-offset:1px;border-color:#5d96c2}
+.lookup button{border:0;border-radius:10px;padding:0 20px;background:var(--blue);color:#fff;font:600 14px "Segoe UI",Arial,sans-serif;cursor:pointer}
+.lookup button:hover{background:#1f5d98}
+.lookup-note{font-size:12px;color:var(--muted);margin-top:9px}
+.lookup-result{margin-top:16px}
+@media(max-width:620px){.lookup{grid-template-columns:1fr}.lookup button{padding:12px 18px}}
 </style>
 </head>
 <body>
 <header>
   <div class="brand">Diretorias de Processamento Remoto</div>
-  <div class="header-title">Siga-me | Competência na Execução Penal</div>
+  <div class="header-title">Competência na Execução Penal</div>
   <div class="header-sub">Roteiro interativo para identificação do encaminhamento da guia.</div>
 </header>
 <main>
@@ -58,6 +67,194 @@ const courtNames = {
   "VEPEC":"Vara de Execução Penal da Capital, Recife",
   "VEPA":"Vara de Execução de Penas Alternativas, Recife",
   "VEPEMA":"Vara de Execução de Penas em Meio Aberto, Recife"
+};
+
+const municipalityToCirc = {
+  "abreu e lima": 1,
+  "camaragibe": 1,
+  "jaboatão dos guararapes": 1,
+  "moreno": 1,
+  "olinda": 1,
+  "paulista": 1,
+  "recife": 1,
+  "são lourenço da mata": 1,
+  "cabo de santo agostinho": 2,
+  "ipojuca": 2,
+  "igarassu": 3,
+  "araçoiaba": 3,
+  "itamaracá": 3,
+  "itapissuma": 3,
+  "fernando de noronha": 3,
+  "chã grande": 4,
+  "glória do goitá": 4,
+  "chã de alegria": 4,
+  "pombos": 4,
+  "vitória de santo antão": 4,
+  "aliança": 5,
+  "buenos aires": 5,
+  "carpina": 5,
+  "lagoa do carro": 5,
+  "condado": 5,
+  "ferreiros": 5,
+  "camutanga": 5,
+  "goiana": 5,
+  "itambé": 5,
+  "itaquitinga": 5,
+  "lagoa de itaenga": 5,
+  "macaparana": 5,
+  "nazaré da mata": 5,
+  "paudalho": 5,
+  "timbaúba": 5,
+  "tracunhaém": 5,
+  "vicência": 5,
+  "água preta": 6,
+  "xexéu": 6,
+  "amaraji": 6,
+  "barreiros": 6,
+  "belém de maria": 6,
+  "catende": 6,
+  "cortês": 6,
+  "escada": 6,
+  "gameleira": 6,
+  "joaquim nabuco": 6,
+  "maraial": 6,
+  "jaqueira": 6,
+  "palmares": 6,
+  "primavera": 6,
+  "quipapá": 6,
+  "são benedito do sul": 6,
+  "ribeirão": 6,
+  "rio formoso": 6,
+  "são josé da coroa grande": 6,
+  "sirinhaém": 6,
+  "tamandaré": 6,
+  "alagoinha": 7,
+  "belo jardim": 7,
+  "bezerros": 7,
+  "brejo da madre de deus": 7,
+  "cachoeirinha": 7,
+  "caruaru": 7,
+  "gravatá": 7,
+  "jataúba": 7,
+  "pesqueira": 7,
+  "poção": 7,
+  "riacho das almas": 7,
+  "sanharó": 7,
+  "são bento do una": 7,
+  "são caetano": 7,
+  "tacaimbó": 7,
+  "agrestina": 8,
+  "altinho": 8,
+  "bonito": 8,
+  "barra de guabiraba": 8,
+  "camocim de são félix": 8,
+  "cupira": 8,
+  "ibirajuba": 8,
+  "lagoa dos gatos": 8,
+  "panelas": 8,
+  "sairé": 8,
+  "são joaquim do monte": 8,
+  "bom jardim": 9,
+  "machados": 9,
+  "cumaru": 9,
+  "feira nova": 9,
+  "joão alfredo": 9,
+  "salgadinho": 9,
+  "limoeiro": 9,
+  "orobó": 9,
+  "passira": 9,
+  "são vicente ferrer": 9,
+  "angelim": 10,
+  "bom conselho": 10,
+  "terezinha": 10,
+  "brejão": 10,
+  "caetés": 10,
+  "calçado": 10,
+  "canhotinho": 10,
+  "capoeiras": 10,
+  "correntes": 10,
+  "garanhuns": 10,
+  "iati": 10,
+  "jupi": 10,
+  "jucati": 10,
+  "jurema": 10,
+  "lagoa do ouro": 10,
+  "lajedo": 10,
+  "palmeirina": 10,
+  "saloá": 10,
+  "paranatama": 10,
+  "são joão": 10,
+  "santa maria do cambucá": 11,
+  "frei miguelinho": 11,
+  "surubim": 11,
+  "casinhas": 11,
+  "vertente do lério": 11,
+  "vertentes": 11,
+  "águas belas": 12,
+  "buíque": 12,
+  "itaíba": 12,
+  "pedra": 12,
+  "tupanatinga": 12,
+  "venturosa": 12,
+  "afogados da ingazeira": 13,
+  "iguaraci": 13,
+  "itapetim": 13,
+  "brejinho": 13,
+  "são josé do egito": 13,
+  "santa terezinha": 13,
+  "tabira": 13,
+  "solidão": 13,
+  "tuparetama": 13,
+  "ingazeira": 13,
+  "arcoverde": 14,
+  "betânia": 14,
+  "custódia": 14,
+  "ibimirim": 14,
+  "inajá": 14,
+  "manari": 14,
+  "sertânia": 14,
+  "mirandiba": 15,
+  "carnaubeira da penha": 15,
+  "parnamirim": 15,
+  "salgueiro": 15,
+  "são josé do belmonte": 15,
+  "serrita": 15,
+  "cedro": 15,
+  "terra nova": 15,
+  "verdejante": 15,
+  "belém de são francisco": 16,
+  "itacuruba": 16,
+  "floresta": 16,
+  "petrolândia": 16,
+  "jatobá": 16,
+  "tacaratu": 16,
+  "araripina": 17,
+  "bodocó": 17,
+  "granito": 17,
+  "exu": 17,
+  "ipubi": 17,
+  "moreilândia": 17,
+  "ouricuri": 17,
+  "santa cruz": 17,
+  "santa filomena": 17,
+  "trindade": 17,
+  "afrânio": 18,
+  "dormentes": 18,
+  "cabrobó": 18,
+  "lagoa grande": 18,
+  "orocó": 18,
+  "petrolina": 18,
+  "santa maria da boa vista": 18,
+  "santa cruz do capibaribe": 19,
+  "taquaritinga do norte": 19,
+  "toritama": 19,
+  "carnaíba": 20,
+  "quixaba": 20,
+  "flores": 20,
+  "calumbi": 20,
+  "serra talhada": 20,
+  "triunfo": 20,
+  "santa cruz da baixa verde": 20,
 };
 
 const units = [
@@ -143,6 +340,51 @@ function result(title,body,checks=commonChecks,kind="success"){
 function outcome(court,meio,extra=""){
  const full=courtNames[court]||"";
  result("Destino indicado",`Juízo: <strong>${court}</strong>${full?`<br>Nome completo: <strong>${full}</strong>`:""}.<br>Meio: <strong>${meio}</strong>.${extra?`<br><br>${extra}`:""}`);
+}
+
+
+function normalizeText(value){
+ return value.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim().replace(/\s+/g," ");
+}
+const regionByCirc={
+ 1:"Região Metropolitana",2:"Região Metropolitana",3:"Região Metropolitana",
+ 4:"Zona da Mata",5:"Zona da Mata",6:"Zona da Mata",
+ 7:"Agreste",8:"Agreste",9:"Agreste",10:"Agreste",11:"Agreste",12:"Agreste",19:"Agreste",
+ 13:"Sertão",14:"Sertão",15:"Sertão",16:"Sertão",17:"Sertão",18:"Sertão",20:"Sertão"
+};
+function circunscriptionLookup(context, callback){
+ currentPage={kicker:`${context} · Localização`,question:"Qual é a cidade do endereço?",help:"Digite o nome da cidade para identificar a circunscrição judiciária correspondente.",options:[]};
+ stepLabel.textContent=`${context} · Localização`;
+ progressLabel.textContent=`Etapa ${Math.min(history.length+1,6)}`;
+ progressBar.style.width=`${Math.min(95,Math.max(15,(history.length+1)*14))}%`;
+ backBtn.disabled=history.length===0;
+ restartBtn.hidden=true;
+ const datalist=Object.keys(municipalityToCirc).sort((a,b)=>a.localeCompare(b,"pt-BR")).map(c=>`<option value="${c}">`).join("");
+ screen.innerHTML=`
+  <div class="kicker">${context} · Localização</div>
+  <h2 class="question">Qual é a cidade do endereço?</h2>
+  <p class="help">Digite o nome da cidade e pesquise a circunscrição judiciária correspondente.</p>
+  <div class="lookup">
+   <input id="cityInput" list="cityList" autocomplete="off" placeholder="Ex.: Petrolina" aria-label="Nome do município">
+   <datalist id="cityList">${datalist}</datalist>
+   <button type="button" id="citySearchBtn">Pesquisar</button>
+  </div>
+  <div class="lookup-note">A busca considera o nome da cidade, com ou sem acentuação.</div>
+  <div id="cityResult" class="lookup-result"></div>`;
+ const input=document.getElementById("cityInput");
+ const btn=document.getElementById("citySearchBtn");
+ function doSearch(){
+  const raw=input.value.trim();
+  const key=normalizeText(raw);
+  const circ=municipalityToCirc[key];
+  const box=document.getElementById("cityResult");
+  if(!key){box.innerHTML='<div class="notice info">Digite o nome do município.</div>';return;}
+  if(!circ){box.innerHTML='<div class="notice info">Município não localizado. Confira a grafia e tente novamente.</div>';return;}
+  box.innerHTML=`<div class="notice success"><strong>${raw}</strong><br>${circ}ª Circunscrição Judiciária · ${regionByCirc[circ]||""}<div style="margin-top:10px"><button type="button" class="btn primary" id="useCircBtn">Usar esta circunscrição</button></div></div>`;
+  document.getElementById("useCircBtn").addEventListener("click",()=>callback(circ,raw),{once:true});
+ }
+ btn.addEventListener("click",doSearch);
+ input.addEventListener("keydown",e=>{if(e.key==="Enter")doSearch();});
 }
 
 function executionCheck(){
@@ -257,13 +499,35 @@ function closedDomicile(){
   {label:"Não sei",action:()=>result("É necessária conferência","Confirme o histórico de recolhimento antes de definir a referência territorial.",["Verificar se houve recolhimento anterior.","Retomar o roteiro após a confirmação."],"info")}
  ]);
 }
+function publicJailByCirc(circ,cidade){
+ if(circ>=4&&circ<=6) outcome("2ª VEP","Meio Fechado e Semiaberto",`Município: ${cidade} · ${circ}ª Circunscrição.`);
+ else if([7,8,9,10,11,12,19].includes(circ)) outcome("3ª VEP","Meio Fechado e Semiaberto",`Município: ${cidade} · ${circ}ª Circunscrição.`);
+ else if([13,14,15,16,17,18,20].includes(circ)) outcome("4ª VEP","Meio Fechado e Semiaberto",`Município: ${cidade} · ${circ}ª Circunscrição.`);
+ else result("Circunscrição identificada",`Município: <strong>${cidade}</strong><br>${circ}ª Circunscrição Judiciária · ${regionByCirc[circ]||""}.<br><br>Para esta faixa, confirme o enquadramento específico antes de definir o juízo.`,["Confirmar a situação da cadeia pública.","Validar o juízo competente antes da distribuição."],"info");
+}
+function closedResidenceByCirc(circ,cidade){
+ if(circ>=4&&circ<=6) outcome("2ª VEP","Meio Fechado e Semiaberto",`Município: ${cidade} · ${circ}ª Circunscrição.`);
+ else if([7,8,9,10,11,12,19].includes(circ)) outcome("3ª VEP","Meio Fechado e Semiaberto",`Município: ${cidade} · ${circ}ª Circunscrição.`);
+ else if([13,14,15,16,17,18,20].includes(circ)) outcome("4ª VEP","Meio Fechado e Semiaberto",`Município: ${cidade} · ${circ}ª Circunscrição.`);
+ else result("Circunscrição identificada",`Município: <strong>${cidade}</strong><br>${circ}ª Circunscrição Judiciária · ${regionByCirc[circ]||""}.<br><br>Para esta faixa, confirme o enquadramento específico antes de definir a VEP.`,["Confirmar a circunscrição.","Validar o juízo competente antes da distribuição."],"info");
+}
+function semiByCircLookup(circ,cidade){
+ if(circ<=6) outcome(gender==="f"?"1ª VEP":"VEPEC","Meio Fechado e Semiaberto",`Município: ${cidade} · ${circ}ª Circunscrição.`);
+ else if([7,8,9,10,11,12,19].includes(circ)) outcome("3ª VEP","Meio Fechado e Semiaberto",`Município: ${cidade} · ${circ}ª Circunscrição.`);
+ else if([13,14,15,16,17,18,20].includes(circ)) outcome("4ª VEP","Meio Fechado e Semiaberto",`Município: ${cidade} · ${circ}ª Circunscrição.`);
+ else result("Circunscrição identificada",`Município: <strong>${cidade}</strong><br>${circ}ª Circunscrição Judiciária.`,["Confirmar o enquadramento da situação.","Validar o juízo competente."],"info");
+}
+function treatmentByCircLookup(circ,cidade){
+ outcome(circ<=6?"VEPEMA":"Juízo da comarca de residência do sentenciado","Meio Aberto",`Município: ${cidade} · ${circ}ª Circunscrição.`);
+}
+
 function closedResidence(){
  page("Regime fechado · Endereço residencial","Qual é a circunscrição do endereço residencial?","Sem recolhimento anterior, a circunscrição do endereço é a referência territorial para definir a VEP. Para a faixa de 1ª a 3ª, confirme o enquadramento específico antes de concluir.",[
   {label:"1ª, 2ª ou 3ª circunscrição",action:()=>result("É necessária conferência","Confirme o juízo competente para essa faixa antes de distribuir.",["Confirmar a circunscrição.","Validar o juízo competente."],"info")},
   {label:"4ª, 5ª ou 6ª circunscrição",action:()=>outcome("2ª VEP","Meio Fechado e Semiaberto")},
   {label:"7ª, 8ª, 9ª, 10ª, 11ª, 12ª ou 19ª circunscrição",action:()=>outcome("3ª VEP","Meio Fechado e Semiaberto")},
   {label:"13ª, 14ª, 15ª, 16ª, 17ª, 18ª ou 20ª circunscrição",action:()=>outcome("4ª VEP","Meio Fechado e Semiaberto")},
-  {label:"Não sei",action:()=>result("É necessária conferência","Identifique a circunscrição do endereço residencial.",["Confirmar o endereço completo.","Identificar a circunscrição correspondente."],"info")}
+  {label:"Não sei qual é a circunscrição",desc:"Pesquisar pela cidade do endereço.",action:()=>circunscriptionLookup("Regime fechado · Endereço residencial",(circ,cidade)=>closedResidenceByCirc(circ,cidade))}
  ]);
 }
 
@@ -345,7 +609,7 @@ function treatmentCirc(){
  page("Tratamento ambulatorial","Qual é a circunscrição do endereço residencial?","Use a circunscrição judiciária do domicílio.",[
   {label:"1ª, 2ª, 3ª, 4ª, 5ª ou 6ª",action:()=>outcome("VEPEMA","Meio Aberto")},
   {label:"7ª, 8ª, 9ª, 10ª, 11ª, 12ª, 13ª, 14ª, 15ª, 16ª, 17ª, 18ª, 19ª ou 20ª",action:()=>outcome("Juízo da comarca de residência do sentenciado","Meio Aberto")},
-  {label:"Não sei",action:()=>result("É necessária conferência","Identifique a circunscrição do endereço residencial.",["Confirmar endereço completo.","Identificar a circunscrição correspondente."],"info")}
+  {label:"Não sei qual é a circunscrição",desc:"Pesquisar pela cidade do endereço.",action:()=>circunscriptionLookup("Tratamento ambulatorial",(circ,cidade)=>treatmentByCircLookup(circ,cidade))}
  ]);
 }
 
