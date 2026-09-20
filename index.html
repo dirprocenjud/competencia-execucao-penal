@@ -346,6 +346,10 @@ function outcome(court,meio,extra=""){
 function normalizeText(value){
  return value.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim().replace(/\s+/g," ");
 }
+// Índice sem acentos: permite pesquisar nomes digitados com ou sem sinais diacríticos.
+const normalizedMunicipalityToCirc = Object.fromEntries(
+ Object.entries(municipalityToCirc).map(([name,circ])=>[normalizeText(name),circ])
+);
 const regionByCirc={
  1:"Região Metropolitana",2:"Região Metropolitana",3:"Região Metropolitana",
  4:"Zona da Mata",5:"Zona da Mata",6:"Zona da Mata",
@@ -365,7 +369,7 @@ function circunscriptionLookup(context, callback){
   <h2 class="question">Qual é a cidade do endereço?</h2>
   <p class="help">Digite o nome da cidade e pesquise a circunscrição judiciária correspondente.</p>
   <div class="lookup">
-   <input id="cityInput" list="cityList" autocomplete="off" placeholder="Ex.: Petrolina" aria-label="Nome do município">
+   <input id="cityInput" list="cityList" autocomplete="off" placeholder="Ex.: Petrolina" aria-label="Nome da cidade">
    <datalist id="cityList">${datalist}</datalist>
    <button type="button" id="citySearchBtn">Pesquisar</button>
   </div>
@@ -376,10 +380,10 @@ function circunscriptionLookup(context, callback){
  function doSearch(){
   const raw=input.value.trim();
   const key=normalizeText(raw);
-  const circ=municipalityToCirc[key];
+  const circ=normalizedMunicipalityToCirc[key];
   const box=document.getElementById("cityResult");
-  if(!key){box.innerHTML='<div class="notice info">Digite o nome do município.</div>';return;}
-  if(!circ){box.innerHTML='<div class="notice info">Município não localizado. Confira a grafia e tente novamente.</div>';return;}
+  if(!key){box.innerHTML='<div class="notice info">Digite o nome da cidade.</div>';return;}
+  if(!circ){box.innerHTML='<div class="notice info">Cidade não localizada. Confira a grafia e tente novamente.</div>';return;}
   box.innerHTML=`<div class="notice success"><strong>${raw}</strong><br>${circ}ª Circunscrição Judiciária · ${regionByCirc[circ]||""}<div style="margin-top:10px"><button type="button" class="btn primary" id="useCircBtn">Usar esta circunscrição</button></div></div>`;
   document.getElementById("useCircBtn").addEventListener("click",()=>callback(circ,raw),{once:true});
  }
